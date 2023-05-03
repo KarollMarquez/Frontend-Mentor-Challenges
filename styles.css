@@ -6,12 +6,15 @@
 }
 
 body{
-    width: 85%;
     font-family: 'Lato', sans-serif;
     margin: 0 auto;
     background-color: #FFD3B0;
 }
 
+main{
+    width: 85%;
+    margin: 0 auto;
+}
 h1{
     font-family: 'Ubuntu', sans-serif;
     text-align: center;
@@ -47,8 +50,28 @@ a{
 h3{
     padding: 15px 0;
 }
+footer{
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    background-color: #252525;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+}
+footer a{
+    color: white;
+    font-family: 'Lato', sans-serif;
+    border-bottom: 1px solid white;
+}
+footer img{
+    width: 32px;
+}
 
 @media (max-width: 425px) {
+    main{
+        margin-bottom: 100px;
+    }
     section{
         flex-direction: column;
     }
