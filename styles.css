@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato&family=Ubuntu:wght@700&display=swap');
+
+*{
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: 'Lato', sans-serif;
+    margin: 0 auto;
+    background-color: #FFD3B0;
+}
+
+main{
+    width: 85%;
+    margin: 0 auto;
+}
+h1{
+    font-family: 'Ubuntu', sans-serif;
+    text-align: center;
+    margin: 50px 0 30px;
+}
+section{
+    display: grid;
+    gap: 15px;
+    grid-template-columns: repeat(4, 1fr);
+}
+article{
+    width: 100%;
+    border-radius: 10px;
+    background-color: white;
+    /* box-shadow: rgba(0, 0, 0, 0.5) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px; */
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+}
+.img-hero{
+    width: 100%;
+    border-radius: 10px 10px 0 0;
+    border-bottom: 1px dashed #FFD3B0;
+}
+.text{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 20px 5px;
+}
+a{
+    text-decoration: none;
+    color: black;
+}
+h3{
+    padding: 15px 0;
+}
+footer{
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    background-color: #252525;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+}
+footer a{
+    color: white;
+    font-family: 'Lato', sans-serif;
+    border-bottom: 1px solid white;
+}
+footer img{
+    width: 32px;
+}
+
+@media (max-width: 425px) {
+    main{
+        margin-bottom: 100px;
+    }
+    section{
+        flex-direction: column;
+    }
+    article{
+        margin: 0 auto;
+    }
+}

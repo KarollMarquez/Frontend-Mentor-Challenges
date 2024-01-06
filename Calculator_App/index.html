@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+
+    <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+    
+    <title>Frontend Mentor | Calculator app</title>
+
+    <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
+    <style>
+        .attribution { font-size: 11px; text-align: center; color: var(--color-attribution); padding-bottom: 30px;}
+        .attribution a { color: var(--color2-attribution)}
+    </style>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main class="container">
+        <nav class="flex">
+            <div class="title">
+                <h1>calc</h1>
+            </div>
+            <div class="flex">
+                <div>
+                    <p>THEME</p>
+                </div>
+                <div>
+                    <div class="labels">
+                        <label for="theme">1</label>
+                        <label for="theme">2</label>
+                        <label for="theme">3</label>
+                    </div>
+                    <div class="dr">
+                        <input type="radio" name="theme" value="theme1" class="theme1" checked/>
+                        <input type="radio" name="theme" value="theme2" class="theme2"/>
+                        <input type="radio" name="theme" value="theme3" class="theme3"/>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <section class="input">
+            <input type="text" placeholder="399,981" id="resultado">
+        </section>
+        <section class="grid">
+            <div class="button data" data-valor="7"><p>7</p></div>
+            <div class="button data" data-valor="8"><p>8</p></div>
+            <div class="button data" data-valor="9"><p>9</p></div>
+            <div class="button color2" onclick="deleteCaracter()"><p>DEL</p></div>
+            <div class="button data" data-valor="4"><p>4</p></div>
+            <div class="button data" data-valor="5"><p>5</p></div>
+            <div class="button data" data-valor="6"><p>6</p></div>
+            <div class="button data" data-valor="+"><p>+</p></div>
+            <div class="button data" data-valor="1"><p>1</p></div>
+            <div class="button data" data-valor="2"><p>2</p></div>
+            <div class="button data" data-valor="3"><p>3</p></div>
+            <div class="button data" data-valor="-"><p>-</p></div>
+            <div class="button data" data-valor="."><p>.</p></div>
+            <div class="button data" data-valor="0"><p>0</p></div>
+            <div class="button data" data-valor="/"><p>/</p></div>
+            <div class="button data" data-valor="x"><p>x</p></div>
+            <div class="button color2 big" onclick="reset()"><p>RESET</p></div>
+            <div class="button color3 big" onclick="resolver()"><p>=</p></div>
+        </section>
+    </main>
+
+    <div class="attribution">
+        Challenge by <a href="https://www.frontendmentor.io/challenges/calculator-app-9lteq5N29" target="_blank">Frontend Mentor</a>. 
+        Coded by <a href="https://github.com/KarollMarquez">Karoll Marquez</a>.
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>

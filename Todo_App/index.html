@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+    <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+    <title>Frontend Mentor | Todo app</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .attribution { font-size: 11px; text-align: center; }
+        .attribution a { color: hsl(228, 45%, 44%); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <main>
+            <header>
+                <h1>TODO</h1>
+                <div class="moon"><img src="images/icon-moon.svg" alt="Moon Icon"></div>
+                <div class="sun"><img src="images/icon-sun.svg" alt="Sun Icon"></div>
+            </header>
+            <section class="addTask">
+                <input id="checkbox">
+                <label for="checkbox" ><img class="iconCheck" src="images/icon-check.svg" alt="Icon Check"></label>
+                <input type="text" name="task" id="task" placeholder="Create a new todo...">
+            </section>
+            <section class="taskContainer">
+                <div class="tasks">
+                </div>
+                <div class="filterContainer">
+                    <p class="counter"></p>
+                    <div class="filter">
+                        <a href="#" class="all">All</a>
+                        <a href="#" class="active">Active</a>
+                        <a href="#" class="completed">Completed</a>
+                    </div>
+                    <a href="#" class="deleteAll">Clear Completed</a>
+                </div>
+            </section>
+            <div class="filter2">
+                <a href="#" class="all">All</a>
+                <a href="#" class="active">Active</a>
+                <a href="#" class="completed">Completed</a>
+            </div>
+            <p class="dragInfo">Drag and drop to reorder list</p>
+        </main>
+
+        <div class="attribution">
+            Challenge by <a href="https://www.frontendmentor.io/challenges/todo-app-Su1_KokOW" target="_blank">Frontend Mentor</a>. 
+            Coded by <a href="https://github.com/KarollMarquez">Karoll Marquez</a>.
+        </div>
+    </div>
+    <script src="main.js"></script>
+</body>
+</html>
