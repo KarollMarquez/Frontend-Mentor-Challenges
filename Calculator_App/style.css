@@ -158,6 +158,9 @@ input::placeholder{
     .input input{
         font-size: 2em;
     }
+    .grid{
+        grid-template-columns: 1fr;
+    }
     .grid div{
         font-size: 29px;
         padding: 20px 10px 15px;
