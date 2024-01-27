@@ -73,7 +73,7 @@ footer img{
         margin-bottom: 100px;
     }
     section{
-        flex-direction: column;
+        grid-template-columns: 1fr;
     }
     article{
         margin: 0 auto;
