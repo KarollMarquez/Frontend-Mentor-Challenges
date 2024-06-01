@@ -14,8 +14,8 @@ taskElement.addEventListener("keydown", function(event) {
     }
 });
 
-var tareas = [];
-var numeroID = 0;
+let tareas = [];
+let numeroID = 0;
 
 //se toman todas las tareas anteriormente guardadas---------------------------------------------
 function getTodos() {
@@ -59,13 +59,13 @@ function mostrarTodos() {
         numeroID++;
     }
 
-    let estado = true;
+    let estado = "true";
 
     for (let i = 0; i < localStorage.length; i++) {
         let clave = localStorage.key(i);
         let valor = localStorage.getItem(clave);
 
-        if (valor === estado.toString()) {
+        if (valor === estado) {
             let inicialTarea = clave.slice(0, 6);
             let tareaTexto = localStorage.getItem(inicialTarea);
             document.querySelectorAll("p").forEach(function (pElement) {
@@ -83,25 +83,6 @@ function mostrarTodos() {
 }
 mostrarTodos();
 
-//se cargan estados de los inputs para las tareas checkeadas--------------------------------------------------
-function cargarEstados() {
-    let inputs = document.querySelectorAll('input[type="checkbox"]');
-
-    inputs.forEach(function(input) {
-        let tarea = input.closest('.task').querySelector("p").textContent;
-        let caracteres = tarea.slice(0,6)
-        // Recuperar el estado almacenado en localStorage
-        let estadoGuardado = localStorage.getItem(`${caracteres}_checked`);
-
-        if (estadoGuardado !== null) {
-            input.checked = estadoGuardado === 'true'; // Convertir de cadena a booleano
-        }
-    });
-}
-
-// Llamamos a cargarEstados al cargar la página
-window.addEventListener('load', cargarEstados);
-
 //se toma y se muestra la ultima tarea añadida------------------------------------------------------------------
 function getLast() {
     let valor = localStorage.getItem(tareaNumero);
@@ -111,21 +92,38 @@ function getLast() {
     let nuevoElemento = document.createElement('div');
     nuevoElemento.classList.add('task');
     
-    nuevoElemento.innerHTML = `
-        <div class="check">
-            <input type="checkbox" id="check${numeroID}">
-            <label for="check${numeroID}"><img class="iconCheck" src="images/icon-check.svg" alt="Icon Check"></label>
-        </div>
-        <div class="textoTarea">
-            <p>${valor}</p>
-            <img class="delete" src="images/icon-cross.svg" alt="Icon Cross">
-        </div>
-    `;
+    if(valor == "Complete online JavaScript course"){
+        nuevoElemento.classList.add("checked");
+        nuevoElemento.innerHTML = `
+            <div class="check">
+                <input type="checkbox" id="check${numeroID}" checked>
+                <label for="check${numeroID}"><img src="images/icon-check.svg" alt="Icon Check"></label>
+            </div>
+            <div class="textoTarea">
+                <p style="color: hsl(236, 33%, 92%)">${valor}</p>
+                <img class="delete" src="images/icon-cross.svg" alt="Icon Cross">
+            </div>
+        `;
+
+        localStorage.setItem(`tarea0_checked`, true);
+    }
+    else{
+        nuevoElemento.innerHTML = `
+            <div class="check">
+                <input type="checkbox" id="check${numeroID}">
+                <label for="check${numeroID}"><img class="iconCheck" src="images/icon-check.svg" alt="Icon Check"></label>
+            </div>
+            <div class="textoTarea">
+                <p>${valor}</p>
+                <img class="delete" src="images/icon-cross.svg" alt="Icon Cross">
+            </div>
+        `;
+        let caracteres = "tarea" + contador;
+        localStorage.setItem(`${caracteres}_checked`, false);
+    }
 
     taskContainer.appendChild(nuevoElemento);
     numeroID++;
-    let caracteres = "tarea" + contador;
-    localStorage.setItem(`${caracteres}_checked`, false);
     asignarEventListeners();
     valor = "";
 }
@@ -135,13 +133,17 @@ function addTodo(valor, contador) {
     localStorage.setItem("tarea" + contador, valor);
     getLast();
     actualizarContador();
-
-    let miElemento = document.querySelector('main');
-    let valorActual = getComputedStyle(miElemento).getPropertyValue('--margin').trim();
-    let valorNumerico = parseFloat(valorActual);
-    let nuevaSuma = valorNumerico + 50;
-    miElemento.style.setProperty('--margin', `${nuevaSuma}px`);
-
+}
+let firstsTask = ['Complete online JavaScript course', 'Read for 1 hour', '10 minutes meditation', 'Jog around the park 3x', 'Complete Todo App on Frontend Mentor', 'Pick up groceries']
+for(const task of firstsTask){
+    if(tareas.includes(task)){
+        continue;
+    }
+    else{
+        addTodo(task, contador);
+        contador++;
+        tareaNumero = "tarea" + contador;
+    }
 }
 
 //contador de tareas por completar--------------------------------------------------------------
@@ -153,12 +155,12 @@ function actualizarContador() {
     let containerContador = document.querySelector(".counter");
     containerContador.innerHTML = contadorTareas + " items left";
 }
+actualizarContador();
 
 //se cambian los estilos cuando se completa una tarea--------------------------------------------------------------
 function cambiarEstilos() {
     let input = this;
     let taskContainer = input.closest('.task');
-    console.log("contenedor");
 
     if (taskContainer) {
         taskContainer.classList.toggle('checked', input.checked);
@@ -167,7 +169,6 @@ function cambiarEstilos() {
         if (imgElement) {
             imgElement.classList.toggle("iconCheck");
         }
-
 
         let pElement = taskContainer.querySelector("p");
         let tarea = pElement.textContent;
@@ -186,20 +187,9 @@ function cambiarEstilos() {
                 localStorage.setItem(`${clave}_checked`, input.checked)
             }
         }
-        ;
+        
     }
 }
-
-let inputs = document.querySelectorAll('input');
-inputs.forEach(function (input) {
-    input.addEventListener('change', cambiarEstilos);
-});
-
-
-inputs.forEach(function(input) {
-    input.addEventListener('change', actualizarContador,);
-});
-actualizarContador();
 
 //drag and drop------------------------------------------------------------------------------------------------
 const taskContainer = document.querySelector('.tasks');
@@ -271,15 +261,15 @@ function asignarEventListeners() {
     });
 
     let inputs = document.querySelectorAll('input');
-    inputs.forEach(function(input) {
+    inputs.forEach(function (input) {
         input.addEventListener('change', cambiarEstilos);
     });
+
+    inputs.forEach(function(input) {
+        input.addEventListener('change', actualizarContador,);
+    });
 }
-
-document.addEventListener("DOMContentLoaded", function () {
-    asignarEventListeners(); // Asignar event listeners inicialmente
-});
-
+asignarEventListeners();
 
 //elimina todas las tareas completadas---------------------------------------------------------------
 function deleteAll() {
