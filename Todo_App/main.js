@@ -1,6 +1,9 @@
 //contador de tareas
 let contador = 0;
 let tareaNumero = "tarea" + contador;
+let numeroID = 0;
+let tareas = [];
+let firstsTask = ['Complete online JavaScript course', 'Read for 1 hour', '10 minutes meditation', 'Jog around the park 3x', 'Complete Todo App on Frontend Mentor', 'Pick up groceries']
 
 //al añadir tarea aumenta el contador---------------------------------------------------------
 let taskElement = document.getElementById('task');
@@ -14,23 +17,38 @@ taskElement.addEventListener("keydown", function(event) {
     }
 });
 
-let tareas = [];
-let numeroID = 0;
+//recorrer localStorage
+function recorrerLS(callback, stop = false){
+    for(let i = 0; i < localStorage.length; i++){
+        let key = localStorage.key(i);
+        let value = localStorage.getItem(key);
+        callback(key, value);
+        if(stop){
+            break;
+        }
+    }
+}
+
+for(let i = 0;i < 6;i++){
+    let key = `tarea${i}_pred`;
+    if (localStorage.getItem(key) === null) {
+        localStorage.setItem(key, "true");
+    }
+}
 
 //se toman todas las tareas anteriormente guardadas---------------------------------------------
 function getTodos() {
     let cantidadElementos = localStorage.length;
     if (cantidadElementos !== 0){
-        for (let i = 0; i < cantidadElementos; i++) {
-            let valor = localStorage.getItem(localStorage.key(i));
-            if(valor !== "false" & valor !== "true"){
-                tareas.push(valor);
+        recorrerLS((key,value) => {
+            if(value !== "false" & value !== "true"){
+                tareas.push(value);
                 while (localStorage.getItem(tareaNumero)) {
                     contador++;
                     tareaNumero = "tarea" + contador;
                 }
             }
-        }
+        })
     }
 }
 getTodos();
@@ -38,7 +56,6 @@ getTodos();
 //se muestran todas las tareas anteriormente guardadas-----------------------------------------------------------------
 function mostrarTodos() {
     let taskContainer = document.querySelector('.tasks');
-
     for (let i = 0; i < tareas.length; i++) {
         let valor2 = tareas[i];
         let nuevoElemento = document.createElement('div');
@@ -59,14 +76,9 @@ function mostrarTodos() {
         numeroID++;
     }
 
-    let estado = "true";
-
-    for (let i = 0; i < localStorage.length; i++) {
-        let clave = localStorage.key(i);
-        let valor = localStorage.getItem(clave);
-
-        if (valor === estado) {
-            let inicialTarea = clave.slice(0, 6);
+    recorrerLS((key,value) => {
+        if (value === "true" && key.endsWith('checked')) {
+            let inicialTarea = key.slice(0, 6);
             let tareaTexto = localStorage.getItem(inicialTarea);
             document.querySelectorAll("p").forEach(function (pElement) {
                 if (pElement.textContent === tareaTexto) {
@@ -79,7 +91,7 @@ function mostrarTodos() {
                 }
             });
         }
-    }
+    })
 }
 mostrarTodos();
 
@@ -92,37 +104,29 @@ function getLast() {
     let nuevoElemento = document.createElement('div');
     nuevoElemento.classList.add('task');
     
-    if(valor == "Complete online JavaScript course"){
-        nuevoElemento.classList.add("checked");
-        nuevoElemento.innerHTML = `
-            <div class="check">
-                <input type="checkbox" id="check${numeroID}" checked>
-                <label for="check${numeroID}"><img src="images/icon-check.svg" alt="Icon Check"></label>
-            </div>
-            <div class="textoTarea">
-                <p style="color: hsl(236, 33%, 92%)">${valor}</p>
-                <img class="delete" src="images/icon-cross.svg" alt="Icon Cross">
-            </div>
-        `;
+    let isCompleteCourse = (valor == "Complete online JavaScript course") ? true : false;
 
+    nuevoElemento.innerHTML = `
+        <div class="check">
+            <input type="checkbox" id="check${numeroID}" ${isCompleteCourse ? "checked" : ""}>
+            <label for="check${numeroID}"><img class="iconCheck" src="images/icon-check.svg" alt="Icon Check"></label>
+        </div>
+        <div class="textoTarea">
+            <p ${isCompleteCourse ? 'style="color: hsl(236, 33%, 92%)"' : ''}>${valor}</p>
+            <img class="delete" src="images/icon-cross.svg" alt="Icon Cross">
+        </div>
+    `;
+    if (isCompleteCourse) {
+        nuevoElemento.classList.add("checked");
         localStorage.setItem(`tarea0_checked`, true);
-    }
-    else{
-        nuevoElemento.innerHTML = `
-            <div class="check">
-                <input type="checkbox" id="check${numeroID}">
-                <label for="check${numeroID}"><img class="iconCheck" src="images/icon-check.svg" alt="Icon Check"></label>
-            </div>
-            <div class="textoTarea">
-                <p>${valor}</p>
-                <img class="delete" src="images/icon-cross.svg" alt="Icon Cross">
-            </div>
-        `;
+    } else {
         let caracteres = "tarea" + contador;
         localStorage.setItem(`${caracteres}_checked`, false);
     }
-
     taskContainer.appendChild(nuevoElemento);
+    if(document.querySelector(".moon").classList.contains("iconMood")){
+        darkMode();
+    }
     numeroID++;
     asignarEventListeners();
     valor = "";
@@ -134,15 +138,13 @@ function addTodo(valor, contador) {
     getLast();
     actualizarContador();
 }
-let firstsTask = ['Complete online JavaScript course', 'Read for 1 hour', '10 minutes meditation', 'Jog around the park 3x', 'Complete Todo App on Frontend Mentor', 'Pick up groceries']
-for(const task of firstsTask){
-    if(tareas.includes(task)){
-        continue;
-    }
-    else{
-        addTodo(task, contador);
+
+for(let i = 0; i < firstsTask.length;i++){
+    let state = localStorage.getItem(`tarea${i}_pred`);
+    if(state === "true" && !tareas.includes(firstsTask[i])){
+        addTodo(firstsTask[i], contador);
         contador++;
-        tareaNumero = "tarea" + contador;
+        tareaNumero = "tarea" + contador;        
     }
 }
 
@@ -179,15 +181,11 @@ function cambiarEstilos() {
             pElement.style.color = "black";
         }
         
-        for (let i = 0; i < localStorage.length; i++){
-            let clave = localStorage.key(i);
-            let valor = localStorage.getItem(clave);
-
-            if(valor === tarea){
-                localStorage.setItem(`${clave}_checked`, input.checked)
+        recorrerLS((key,value) => {
+            if(value === tarea){
+                localStorage.setItem(`${key}_checked`, input.checked)
             }
-        }
-        
+        })        
     }
 }
 
@@ -223,34 +221,23 @@ function deleteTask() {
 
     let parrafo = buttonContainerTask.querySelector("p");
     let tarea = parrafo.textContent;
-
     if (tarea) {
-        // Iterar sobre todos los elementos en localStorage
-        for (let i = 0; i < localStorage.length; i++) {
-            let clave = localStorage.key(i);
-            let valor = localStorage.getItem(clave);
-
-            // Verificar si el valor coincide
-            if (valor === tarea) {
+        recorrerLS((key,value) => {
+            if (value === tarea) {
                 // Eliminar la clave que corresponde al valor
-                localStorage.removeItem(clave);
-                localStorage.removeItem(`${clave}_checked`);
-                break; // Puedes detener la iteración si solo esperas un elemento con este valor
+                localStorage.removeItem(key);
+                localStorage.removeItem(`${key}_checked`);
+                if(firstsTask.includes(tarea)){
+                    localStorage.setItem(`${key}_pred`, false);
+                }
             }
-        }
+        })
     }
 
-    let index = tareas.indexOf(tarea);
-    
-    if (index !== -1) {
-        // Si la tarea está en el array, elimínala
-        tareas.splice(index, 1);
-
-        // Elimina el elemento visual correspondiente
+    if (tareas.includes(tarea)) {
         buttonContainerTask.remove();
-        
-        // Actualiza el contador
         actualizarContador();
+        tareas.splice(tareas.indexOf(tarea), 1);
     }
 }
 
@@ -279,17 +266,15 @@ function deleteAll() {
         let tarea = contenedor.querySelector("p");
         let contenidoTarea = tarea.textContent;
 
-        for (let i = 0; i < localStorage.length; i++) {
-            let clave = localStorage.key(i);
-            let valor = localStorage.getItem(clave);
-
-            // Verificar si el valor coincide
-            if (valor === contenidoTarea) {
-                localStorage.removeItem(clave);
-                localStorage.removeItem(`${clave}_checked`);
-                break;
+        recorrerLS((key,value) => {
+            if (value === tarea) {
+                // Eliminar la clave que corresponde al valor
+                localStorage.removeItem(key);
+                localStorage.removeItem(`${key}_checked`);
+                return true;
             }
-        }
+            return false;
+        }, true)
 
         let indice = tareas.indexOf(contenidoTarea);
 
@@ -308,12 +293,9 @@ deleteAllButton.addEventListener("click", deleteAll);
 //funcion para active y completed vision---------------------------------------------------
 function activeVision() {
     let estado = true;
-    for (let i = 0; i < localStorage.length; i++) {
-        let clave = localStorage.key(i);
-        let valor = localStorage.getItem(clave);
-
-        if (valor === estado.toString()) {
-            let inicialTarea = clave.slice(0, 6);
+    recorrerLS((key,value) => {
+        if (value === estado.toString()) {
+            let inicialTarea = key.slice(0, 6);
             let tareaTexto = localStorage.getItem(inicialTarea)
             document.querySelectorAll("p").forEach(function (pElement) {
                 if (pElement.textContent === tareaTexto) {
@@ -321,8 +303,8 @@ function activeVision() {
                 }
             });
         }
-        else if (valor === "false"){
-            let inicialTarea = clave.slice(0, 6);
+        else if (value === "false"){
+            let inicialTarea = key.slice(0, 6);
             let tareaTexto = localStorage.getItem(inicialTarea)
             document.querySelectorAll("p").forEach(function (pElement) {
                 if (pElement.textContent === tareaTexto) {
@@ -330,7 +312,7 @@ function activeVision() {
                 }
             });
         }
-    }
+    })
 }
 
 let activeButton = document.querySelectorAll(".active");
@@ -349,12 +331,9 @@ activeButton.forEach( function(active){
 
 function completeVision() {
     let estado = false;
-    for (let i = 0; i < localStorage.length; i++) {
-        let clave = localStorage.key(i);
-        let valor = localStorage.getItem(clave);
-
-        if (valor === estado.toString()) {
-            let inicialTarea = clave.slice(0, 6);
+    recorrerLS((key,value) => {
+        if (value === estado.toString()) {
+            let inicialTarea = key.slice(0, 6);
             let tareaTexto = localStorage.getItem(inicialTarea)
             document.querySelectorAll("p").forEach(function (pElement) {
                 if (pElement.textContent === tareaTexto) {
@@ -362,8 +341,8 @@ function completeVision() {
                 }
             });
         }
-        else if (valor === "true"){
-            let inicialTarea = clave.slice(0, 6);
+        else if (value === "true"){
+            let inicialTarea = key.slice(0, 6);
             let tareaTexto = localStorage.getItem(inicialTarea)
             document.querySelectorAll("p").forEach(function (pElement) {
                 if (pElement.textContent === tareaTexto) {
@@ -371,7 +350,7 @@ function completeVision() {
                 }
             });
         }
-    }
+    })
 }
 
 let completedButton = document.querySelectorAll(".completed");
@@ -511,6 +490,7 @@ function darkMode() {
 }
 
 moonIcon.addEventListener("click", darkMode);
+darkMode();
 
 function ligthMode(){
     sunIcon.classList.add("iconMood");
@@ -584,5 +564,4 @@ function ligthMode(){
     filter.style.backgroundColor = "white";
     filter.style.boxShadow = "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px";
 }
-ligthMode();
 sunIcon.addEventListener("click", ligthMode);
