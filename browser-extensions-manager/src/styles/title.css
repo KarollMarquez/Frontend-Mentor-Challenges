@@ -1,0 +1,96 @@
+header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 20px 0;
+}
+
+header.tdark{
+  color: white;
+}
+
+header.tlight{
+  color: hsl(227, 75%, 14%);
+}
+
+header > div{
+  display: flex;
+  gap: 10px;
+}
+
+header button{
+  padding: 5px 10px;
+  border-radius: 15px;
+}
+
+.filter-btn {
+  padding: 5px 15px;
+  border-radius: 20px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.filter-btn.tdark{
+  background-color: hsl(225, 23%, 24%);
+  border: 1px solid hsl(225, 23%, 24%);
+  color: white;
+}
+
+.filter-btn.tdark.active {
+  background-color: hsl(3, 86%, 64%);
+  border: none;
+  color: hsl(227, 75%, 14%);
+}
+
+.filter-btn.tdark:hover{
+  background-color: hsl(226, 11%, 37%);
+}
+
+.filter-btn.tdark:focus{
+  border: 1px solid hsl(3, 86%, 64%);
+}
+
+.filter-btn.tdark.active:hover{
+  color: hsl(227, 75%, 14%);
+}
+
+.filter-btn.tlight{
+  background-color: hsl(200, 60%, 99%);
+  border: 1px solid hsl(217, 61%, 90%);
+  color: hsl(225, 23%, 24%);
+}
+
+.filter-btn.tlight.active{
+  background-color: hsl(3, 77%, 44%);
+  color: hsl(0, 0%, 93%);
+}
+
+.filter-btn.tlight:hover{
+  background-color: #EEF8F9;
+  border: 1px solid hsl(0, 0%, 93%);
+  color: hsl(226, 11%, 37%);
+}
+
+.filter-btn.tlight.active:hover{
+  color: hsl(200, 60%, 99%);
+}
+
+.filter-btn.tlight:focus{
+  border: 1px solid hsl(3, 77%, 44%);
+}
+
+.filter-btn.active:hover{
+  background-color: hsl(3, 71%, 56%);
+}
+
+@media (max-width: 500px){
+  header{
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .filter-btn{
+    font-size: 1rem;
+  }
+}
